@@ -1,0 +1,4 @@
+node_modules
+dist
+tscdir
+.cache

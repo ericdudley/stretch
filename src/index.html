@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>| Eric Dudley |</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="scss/index.scss" />
+  </head>
+
+  <body>
+    <div class="no-transition-on-load">
+      <div id="stretch" class="page">
+        <h1 data-text="Take some time to stretch" id="stretch-title">
+          Take some time to stretch
+        </h1>
+        <div id="stretch-outer-circle" class="stretch-outer-circle">
+          <div id="stretch-inner-circle" class="stretch-inner-circle"></div>
+          <div class="stretch">
+            <div
+              id="stretch-set-dashes-container"
+              class="stretch__set__dashes stretch__dashes"
+            ></div>
+            <div
+              id="stretch-rep-dashes-container"
+              class="stretch__rep__dashes stretch__dashes"
+            ></div>
+            <div class="stretch__button">
+              <div id="stretch-button"></div>
+              <div id="stretch-stop-button"></div>
+            </div>
+          </div>
+        </div>
+        <div id="stretch-options-button" class="active">
+          <img src="images/cog.svg" />
+        </div>
+      </div>
+    </div>
+
+    <script src="ts/index.ts"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PEMQ4F1BBQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-PEMQ4F1BBQ');
+    </script>
+  </body>
+</html>

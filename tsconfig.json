@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./src",
+      "outDir": "./tscdir",
+      "paths": {
+        "~*": ["./*"]
+      },
+      "target": "ES2015",
+      "moduleResolution": "Node"
+    },
+    "include": ["src/**/*"]
+  }
+  

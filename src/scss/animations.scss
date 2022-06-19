@@ -1,0 +1,67 @@
+$dark-color: #000;
+$light-color: #fff;
+$pulse-duration: 10s;
+$timing-function: linear;
+
+@keyframes background-fade {
+  from {
+    border-color: $dark-color;
+  }
+  50% {
+    border-color: $light-color;
+  }
+  to {
+    border-color: $dark-color;
+  }
+}
+
+@keyframes blur-loop {
+  from {
+    filter: blur(0px);
+  }
+  80% {
+    filter: blur(0px);
+  }
+  90% {
+    filter: blur(8px);
+  }
+  to {
+    filter: blur(0px);
+  }
+}
+
+@keyframes text-fade {
+  from {
+    color: $light-color;
+  }
+  50% {
+    color: $dark-color;
+  }
+  to {
+    color: $light-color;
+  }
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0% 82%;
+  }
+  50% {
+    background-position: 100% 19%;
+  }
+  100% {
+    background-position: 0% 82%;
+  }
+}

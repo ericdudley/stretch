@@ -1,0 +1,395 @@
+@use "sass:math";
+@import "./animations.scss";
+
+/* Whole Page Styles */
+$h2-offset: math.div(100vw, 20);
+$full-dim: 100vmax * 1.25;
+$small-device-width: 769px;
+$stretch-outer-circle-active-size: 90vmin;
+$stretch-outer-circle-size: 30vmin;
+$button-size: 10vmin;
+$dash-circle-size: 18vmin;
+$dash-size: 10vmin;
+$set-dash-size: $dash-size * 1.2;
+$dash-font-size: 6vmin;
+$outer-circle-color: #2e2e2e;
+$stretch-background-color: rgb(63, 155, 101);
+
+@mixin absolute-centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/// Mixin to place items on a circle
+/// @author Kitty Giraudel
+/// @author Ana Tudor
+/// @param {Integer} $item-count - Number of items on the circle
+/// @param {Length} $circle-size - Large circle size
+/// @param {Length} $item-size - Single item size
+@mixin on-circle($item-count, $circle-size, $item-size, $offset-deg) {
+  width: $circle-size;
+  height: $circle-size;
+  padding: 0;
+  border-radius: 50%;
+  list-style: none;
+
+  > * {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    $angle: math.div(180, $item-count);
+    $rot: $offset-deg;
+    transform-origin: center;
+
+    @for $i from 1 through $item-count {
+      &:nth-of-type(#{$i}) {
+        transform: translateX(-50%)
+          translateY(-50%)
+          rotate($rot)
+          translate($circle-size);
+        // rotate($rot * -1);
+      }
+
+      $rot: $rot + $angle;
+    }
+  }
+}
+
+.no-transition-on-load * {
+  transition: none !important;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+body {
+  box-sizing: border-box;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-family: monospace;
+  background: linear-gradient(
+    45deg,
+    #831100,
+    #8f1212,
+    #917312,
+    #797a11,
+    #0e641c,
+    #0d5d61,
+    #160f70,
+    #6b0e74,
+    #5a0063
+  );
+  background-size: 1500% 1500%;
+  animation: rainbow 30s ease infinite;
+}
+
+#pureFullPage {
+  width: 100vw;
+}
+
+.page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  animation: text-fade $pulse-duration infinite forwards $timing-function,
+    blur-loop $pulse-duration infinite forwards $timing-function;
+  font-size: 48px;
+}
+
+/* Stretch Page */
+
+@keyframes grow {
+  from {
+    width: 0px;
+    height: 0px;
+  }
+  to {
+    width: $full-dim;
+    height: $full-dim;
+  }
+}
+
+#stretch-title {
+  @include absolute-centered();
+  margin-top: 0;
+  margin-bottom: 0;
+  transform: translateX(-50%)
+    translateY(calc(-#{$stretch-outer-circle-size} / 2 - 120%));
+}
+
+.stretch {
+  width: 100%;
+  height: 100%;
+  @include absolute-centered();
+  border-radius: 10000px;
+
+  &.hidden {
+    display: none;
+  }
+
+  &-outer-circle {
+    width: $stretch-outer-circle-size;
+    height: $stretch-outer-circle-size;
+
+    &[data-status="active"] {
+      width: $stretch-outer-circle-active-size;
+      height: $stretch-outer-circle-active-size;
+    }
+
+    transition: width 1000ms ease-out, height 1000ms ease-out;
+
+    @include absolute-centered();
+    border-radius: 10000px;
+    background: $outer-circle-color;
+  }
+
+  &-inner-circle {
+    width: 100%;
+    height: 100%;
+    @include absolute-centered();
+    border-radius: 50%;
+    background-color: $stretch-background-color;
+    transition: width 500ms ease-in-out, height 500ms ease-in-out,
+      border-radius 500ms ease-in-out;
+
+    &.expanded {
+      padding: 16px;
+      border-radius: 16px;
+      min-width: min(800px, 80vw);
+      min-height: $stretch-outer-circle-size;
+      height: fit-content;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  }
+
+  &__text {
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+
+  &__rep > h4,
+  &__set > h4 {
+    font-size: 6vw;
+    margin: 0;
+  }
+
+  &__rep > h5,
+  &__set > h5 {
+    font-size: 1vw;
+    margin: 0;
+  }
+
+  &__time > h4 {
+    font-size: 8vw;
+    display: none;
+  }
+
+  &__time {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+  }
+
+  &__button {
+    @include absolute-centered();
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    #stretch-button {
+      border: none;
+      outline: none;
+
+      border: 0;
+      background: transparent;
+      box-sizing: border-box;
+      width: $button-size;
+      height: $button-size;
+
+      border-color: transparent transparent transparent $outer-circle-color;
+
+      transition: 100ms all ease;
+      transform: translateX($button-size * 0.1);
+      cursor: pointer;
+
+      // play state
+      border-style: solid;
+      border-width: $button-size * 0.5 0 $button-size * 0.5 $button-size;
+
+      &.pause {
+        border-style: double;
+        border-width: 0px 0 0px $button-size;
+        transform: none;
+      }
+
+      &:hover {
+        border-color: transparent transparent transparent #404040;
+      }
+    }
+
+    #stretch-stop-button {
+      display: none;
+      width: $button-size * 0.5;
+      height: $button-size * 0.5;
+      margin-top: $button-size * 0.5;
+      border: none;
+      background-color: $outer-circle-color;
+      transform: none;
+      cursor: pointer;
+
+      &.active {
+        display: block;
+      }
+
+      &.active:hover {
+        background-color: #404040;
+      }
+    }
+  }
+
+  &__dashes {
+    @include absolute-centered();
+
+    &__dash {
+      transition: opacity 1s;
+      width: math.div($dash-size, 1.5);
+      height: $dash-size;
+      border-radius: 40%;
+      background: rgba(255, 255, 255, 0.2);
+
+      &[data-status="active"] {
+        background: rgb(255, 255, 255);
+        animation: pulse 2s infinite forwards linear;
+      }
+
+      &[data-status="done"] {
+        background: rgb(255, 255, 255);
+      }
+
+      & > span {
+        @include absolute-centered();
+        color: $stretch-background-color;
+        font-size: $dash-font-size;
+      }
+    }
+  }
+
+  &__set__dashes {
+    &__dash {
+      width: math.div($set-dash-size, 1.5);
+      height: $set-dash-size;
+
+      &[data-status="active"] {
+        background: rgb(76, 255, 117);
+        animation: pulse 4s infinite forwards linear;
+      }
+
+      &[data-status="done"] {
+        background: rgb(76, 255, 117);
+      }
+    }
+  }
+}
+
+#stretch-options-button {
+  position: absolute;
+  right: $button-size * 0.25;
+  top: $button-size * 0.25;
+  width: $button-size * 0.5;
+  height: $button-size * 0.5;
+  border: none;
+  transform: none;
+  cursor: pointer;
+
+  &.active {
+    display: block;
+  }
+
+  &.active:hover {
+    opacity: 0.8;
+  }
+}
+
+.stretch-options-set-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  & > label {
+    margin-left: 8px;
+  }
+}
+
+.stretch-options-form-button {
+  margin: 8px;
+  outline: rgb(255, 255, 255) solid 2px;
+  background: transparent;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.stretch-options-input {
+  border-radius: 4px;
+  border: solid white 2px;
+  margin: 8px;
+}
+
+.stretch-options-button-container {
+  margin-top: 24px;
+}
+
+@media (max-width: $small-device-width) {
+  #stretch-title {
+    font-size: 36px;
+    word-break: break-all;
+    width: 90vw;
+  }
+
+  #stretch-options-button {
+    width: $button-size;
+    height: $button-size;
+  }
+
+  .stretch-options-set-form {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    & > label {
+      margin-left: 0px;
+      margin-top: 8px;
+    }
+  }
+
+  .stretch-options-input {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
